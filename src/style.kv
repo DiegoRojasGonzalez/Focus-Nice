@@ -1,6 +1,12 @@
 #:kivy 1.1.1
-MDScreen:
+<UIStorage>
+    MDScreen: 
 
-    MDLabel:
-        text: "Hello, World! My name is Diego Rojas "
-        halign: "center"
+        MDLabel:
+            text: "Hello, World! My name is Diego Rojas"
+            halign: "center"
+
+        MDRectangleFlatButton: 
+            text:"Hello, World"
+            pos_hint:{"center_x": 0.2, "center_y": 0.2}
+            on_press: app.fps_monitor_start()
