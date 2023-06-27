@@ -1,17 +1,12 @@
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from pomodoro import Pomodoro
+from kivy.lang import Builder
+from kivymd.app import MDApp
 
-class MainApp(App):
+class FocusNiceApp(MDApp):
     def build(self):
-        return BoxLayout()
+        return Builder.load_file("style.kv")
 
-    def start_pomodoro(self):
-        pomodoro = Pomodoro("Clasico", 25, 5, 15, 4, 0, "Focus", 0)
-        pomodoro.start()
-
-if __name__ == '__main__':
-    MainApp().run()
+    def on_start(self):
+        self.fps_monitor_start()
 
 
+FocusNiceApp().run()

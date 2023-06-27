@@ -18,7 +18,6 @@ class Pomodoro:
             self.Time = self.Time_break
         elif self.State == "Long Break":
             self.Time = self.Time_longbreak
-        print(f"Starting {self.State} for {self.Time} minutes")
 
         while self.Time > 0:
             print(f"Time remaining: {self.Time} minutes")
@@ -41,4 +40,7 @@ class Pomodoro:
             self.State = "Focus"
 
         self.start()
+
+
+
 
