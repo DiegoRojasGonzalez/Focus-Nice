@@ -8,5 +8,5 @@
 
         MDRectangleFlatButton: 
             text:"Hello, World"
-            pos_hint:{"center_x": 0.2, "center_y": 0.2}
-            on_press: app.fps_monitor_start()
+            halign: "center"
+            on_release: app.start_pomodoro() #metodo (on_release) ejecuta una funcion de la clase App dentro del main.py
