@@ -1,54 +1,92 @@
-from kivymd.app import MDApp                                #incluimos la libreria de kivymd para Material Design
-from kivy.lang import Builder                               #incluimos el builder para iniciar el archivo kv con los estilos
-from kivy.uix.screenmanager import ScreenManager, Screen    #incluimos el screen manager para cambiar de pantalla
-from kivy.core.window import Window                         #incluimos la libreria de window para cambiar el tamaño de la ventana 
+from kivymd.app import MDApp
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.core.window import Window
 from kivy.clock import Clock
 
-Window.size = (360, 640)                                    #cambiamos el tamaño de la ventana
+Window.size = (360, 640)
 
-class UIStorage(ScreenManager):                             #creamos la clase UIStorage que hereda de ScreenManager
+class UIStorage(ScreenManager):
     pass
 
-class MainApp(MDApp):                                       #creamos la clase MainApp que hereda de MDApp
-    # Zona de definicion de variables
-    cicle_pom = 1500 #tiempo de trabajo
-    brake_pom = 300 #tiempo de descanso corto
-    long_break = 900 #tiempo de descanso largo
-    #
+class MainApp(MDApp):
+    cicle_pom = 1500  # tiempo de trabajo en segundos
+    brake_pom = 300  # tiempo de descanso corto en segundos
+    long_break = 900  # tiempo de descanso largo en segundos
     
-    state = False #estado del pomodoro en falso
+    state = "inactive"  # estado inicial: trabajo
+    
+    def build(self):
+        Builder.load_file("style.kv")
+        Clock.schedule_interval(self.update_text_time, 1)  # Llamamos al método update_text_time cada segundo
+        return UIStorage()
 
-    def build(self):                                        #creamos el metodo build que se encarga de iniciar la aplicacion
-        Builder.load_file("style.kv")                       #cargamos el archivo kv con los estilos
-        Clock.schedule_interval(self.update_text_time, 0)   #llamamos al metodo update_text_time cada segundo
-        return UIStorage()                                  #retornamos la clase Ui
+    def update_text_time(self, dt):
+        if self.state == "work":
+            if self.cicle_pom > 0:
+                print("work")
+                self.cicle_pom -= 1
+                time = self.cicle_pom
+                minutes, seconds = divmod(time, 60)
+                seconds = int(seconds)
+                minutes = int(minutes)
+                if len(str(seconds)) == 1:
+                    seconds = '0' + str(seconds)
+                if len(str(minutes)) == 1:
+                    minutes = '0' + str(minutes)
+                time = f'{minutes}:{seconds}'
+                self.root.ids.time.text = str(time)
+            else:
+                self.state = "break"
+                self.cicle_pom = self.brake_pom
+                #self.root.ids.time.text = "00:00"
 
-    def on_start(self):
-        self.fps_monitor_start()
+        elif self.state == "break":
+            if self.cicle_pom > 0:
+                print("break")
+                self.cicle_pom -= 1
+                time = self.cicle_pom
+                minutes, seconds = divmod(time, 60)
+                seconds = int(seconds)
+                minutes = int(minutes)
+                if len(str(seconds)) == 1:
+                    seconds = '0' + str(seconds)
+                if len(str(minutes)) == 1:
+                    minutes = '0' + str(minutes)
+                time = f'{minutes}:{seconds}'
+                self.root.ids.time.text = str(time)
+            else:
+                self.cicle_pom = self.long_break
+                self.state = "long_break"
+                #self.root.ids.time.text = "00:00"
 
-    # Metodo start
-    def update_text_time(self, event):                       #creamos el metodo update_text_time que recibe el tiempo
-        if self.state == True:                              #si el estado es falso                                           
-            print("✔")
-            #POMODORO ACTIVO
-            #
-            #
-            #
-            self.cicle_pom -= event                              
-            time = self.cicle_pom                                
-            minutes, seconds = divmod(time, 60)
-            seconds = int(seconds)
-            minutes = int(minutes)
-            if len(str(seconds)) == 1:
-                seconds = '0' + str(seconds)
-            if len(str(minutes)) == 1:
-                minutes = '0' + str(minutes)
-            time = f'{minutes}:{seconds}'
-            self.root.ids.time.text = str(time)                  #cambiamos el texto de la etiqueta time por el tiempo        
-        pass
+        elif self.state == "long_break":
+            print("long_break")
+            if self.cicle_pom > 0:
+                self.cicle_pom -= 1
+                time = self.cicle_pom
+                minutes, seconds = divmod(time, 60)
+                seconds = int(seconds)
+                minutes = int(minutes)
+                if len(str(seconds)) == 1:
+                    seconds = '0' + str(seconds)
+                if len(str(minutes)) == 1:
+                    minutes = '0' + str(minutes)
+                time = f'{minutes}:{seconds}'
+                self.root.ids.time.text = str(time)
+            else:
+                self.cicle_pom = self.brake_pom
+                self.state = "work"
+                #self.root.ids.time.text = "00:00"
+
+    def start_pomodoro(self):
+        self.state = "work"
+        if self.state == "work" or self.state == "break" or self.state == "long_break":
+            print("¡Trabajando!")
+            self.state = "work"
+
+
         
-    def start_pomodoro(self):                               #creamos el metodo start_pomodoro
-        self.state = True                                   #cambiamos el estado a verdadero
 
-if __name__ == "__main__":                                  #verificamos que el archivo se este ejecutando directamente
-    MainApp().run()                                         #ejecutamos la aplicacion
+if __name__ == "__main__":
+    MainApp().run()
