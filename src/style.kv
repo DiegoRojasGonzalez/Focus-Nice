@@ -1,6 +1,10 @@
 #:kivy 1.1.1
 <UIStorage>
     MDScreen: 
+        MDLabel:
+            id: state_actually
+            text: ''
+            halign:'center'
         MDBoxLayout:
             orientation: 'vertical'
             padding: [dp(10),dp(10),dp(10),dp(10)]
@@ -8,6 +12,7 @@
             MDBoxLayout:
                 orientation: 'horizontal'
                 padding: [dp(12),dp(12),dp(12),dp(12)]
+ 
                 MDLabel:
                     id: time
                     text: '25:00'
@@ -22,19 +27,20 @@
                 spacing: dp(12)
                 size_hint: 1,0.30
 
+                
                 MDFloatingActionButton:
-                    id: estado
-                    icon:'palette-outline'
-                    elevation_normal: 12
-                    #on_release: app.open_color_picker()
-                MDFloatingActionButton:
-                    id: control
+                    id: play_button
                     icon:'play-circle-outline'
                     elevation_normal: 12
-                    #on_release: app.button_state(*args)
-                    on_release: app.start_pomodoro() 
+                    on_release: app.start_pomodoro()
+                MDFloatingActionButton:
+                    id: control
+                    icon:'pause-circle-outline'
+                    elevation_normal: 12
+                    on_release: app.pause_pomodoro()
+                
                 MDFloatingActionButton:
                     id: reset
                     icon:'restart'
                     elevation_normal: 12
-                    #on_release: app.button_reset(*args)
+                    on_release: app.reset_pomodoro()

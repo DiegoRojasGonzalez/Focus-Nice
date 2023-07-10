@@ -10,11 +10,11 @@ class UIStorage(ScreenManager):
     pass
 
 class MainApp(MDApp):
-    cicle_pom = 1500  # tiempo de trabajo en segundos
-    brake_pom = 300  # tiempo de descanso corto en segundos
-    long_break = 900  # tiempo de descanso largo en segundos
+    cicle_pom = 10  # tiempo de trabajo en segundos
+    brake_pom = 3  # tiempo de descanso corto en segundos
+    Long_Break = 5  # tiempo de descanso largo en segundos
     
-    state = "inactive"  # estado inicial: trabajo
+    state = "Inactive"  # estado inicial: trabajo
     
     def build(self):
         Builder.load_file("style.kv")
@@ -22,9 +22,22 @@ class MainApp(MDApp):
         return UIStorage()
 
     def update_text_time(self, dt):
-        if self.state == "work":
+        print(self.state)
+        if self.state == "Inactive":
+            time_actually = self.cicle_pom
+            minutes, seconds = divmod(time_actually, 60)
+            seconds = int(seconds)
+            minutes = int(minutes)
+            if len(str(seconds)) == 1:
+                seconds = '0' + str(seconds)
+            if len(str(minutes)) == 1:
+                minutes = '0' + str(minutes)
+            time_actually = f'{minutes}:{seconds}'
+            self.root.ids.time.text = str(time_actually)
+            
+        if self.state == "Focus":
             if self.cicle_pom > 0:
-                print("work")
+                print("Focus")
                 self.cicle_pom -= 1
                 time = self.cicle_pom
                 minutes, seconds = divmod(time, 60)
@@ -37,13 +50,12 @@ class MainApp(MDApp):
                 time = f'{minutes}:{seconds}'
                 self.root.ids.time.text = str(time)
             else:
-                self.state = "break"
+                self.state = "Break"
                 self.cicle_pom = self.brake_pom
-                #self.root.ids.time.text = "00:00"
 
-        elif self.state == "break":
+        elif self.state == "Break":
             if self.cicle_pom > 0:
-                print("break")
+                print("Break")
                 self.cicle_pom -= 1
                 time = self.cicle_pom
                 minutes, seconds = divmod(time, 60)
@@ -56,12 +68,11 @@ class MainApp(MDApp):
                 time = f'{minutes}:{seconds}'
                 self.root.ids.time.text = str(time)
             else:
-                self.cicle_pom = self.long_break
-                self.state = "long_break"
-                #self.root.ids.time.text = "00:00"
+                self.cicle_pom = self.Long_Break
+                self.state = "Long_Break"
 
-        elif self.state == "long_break":
-            print("long_break")
+        elif self.state == "Long_Break":
+            print("Long Break")
             if self.cicle_pom > 0:
                 self.cicle_pom -= 1
                 time = self.cicle_pom
@@ -76,17 +87,23 @@ class MainApp(MDApp):
                 self.root.ids.time.text = str(time)
             else:
                 self.cicle_pom = self.brake_pom
-                self.state = "work"
-                #self.root.ids.time.text = "00:00"
-
+                self.state = "Focus"
+    
     def start_pomodoro(self):
-        self.state = "work"
-        if self.state == "work" or self.state == "break" or self.state == "long_break":
-            print("¡Trabajando!")
-            self.state = "work"
-
-
+        self.state = "Focus"        
+        print("Start")
         
+    def pause_pomodoro(self):
+        self.state = "Inactivo"
+        print("Pause")
+
+    def reset_pomodoro(self):
+        self.state = "Inactivo"
+        print("Restart")
+        self.cicle_pom = 1500
+        self.root.ids.time.text = "25:00"
+        self.brake_pom = 300
+        self.Long_Break = 900
 
 if __name__ == "__main__":
     MainApp().run()
