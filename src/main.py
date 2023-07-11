@@ -3,6 +3,8 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivy.clock import Clock
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
 
 Window.size = (360, 640)
 
@@ -10,13 +12,16 @@ class UIStorage(ScreenManager):
     pass
 
 class MainApp(MDApp):
-    cicle_pom = 10  # tiempo de trabajo en segundos
-    brake_pom = 3  # tiempo de descanso corto en segundos
-    Long_Break = 5  # tiempo de descanso largo en segundos
-    
+    cicle_pom = 1500  # tiempo de trabajo en segundos
+    brake_pom = 300  # tiempo de descanso corto en segundos
+    Long_Break = 500  # tiempo de descanso largo en segundos
     state = "Inactive"  # estado inicial: trabajo
+    dialog = None
     
     def build(self):
+        self.theme_cls.theme_style_switch_animation = True
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "Blue"
         Builder.load_file("style.kv")
         Clock.schedule_interval(self.update_text_time, 1)  # Llamamos al método update_text_time cada segundo
         return UIStorage()
@@ -34,7 +39,7 @@ class MainApp(MDApp):
                 minutes = '0' + str(minutes)
             time_actually = f'{minutes}:{seconds}'
             self.root.ids.time.text = str(time_actually)
-            
+
         if self.state == "Focus":
             if self.cicle_pom > 0:
                 print("Focus")
@@ -89,21 +94,53 @@ class MainApp(MDApp):
                 self.cicle_pom = self.brake_pom
                 self.state = "Focus"
     
-    def start_pomodoro(self):
-        self.state = "Focus"        
-        print("Start")
-        
-    def pause_pomodoro(self):
-        self.state = "Inactivo"
-        print("Pause")
+    def play_pause_pomodoro(self):
+        if self.state == "Inactive":
+            self.state = "Focus"
+            self.root.ids.play_button.icon = 'pause-circle-outline' 
+            self.theme_cls.theme_style = "Dark"
+            self.theme_cls.primary_palette = "Gray"
+        elif not self.state == "Inactive":
+            self.state = "Inactive"
+            self.theme_cls.theme_style = "Light"
+            self.theme_cls.primary_palette = "Blue"
+            self.root.ids.play_button.icon = 'play-circle-outline' 
+
+    def show_alert_dialog(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                text=" Are you sure you want to restart the pomodoro timer?",
+                buttons=[
+                    MDFlatButton(
+                        text="RESTART",
+                        theme_text_color="Custom",
+                        text_color=self.theme_cls.primary_color,
+                        on_release=lambda x: self.reset_pomodoro(),
+                    ),
+                    MDFlatButton(
+                        text="DISCARD",
+                        theme_text_color="Custom",
+                        text_color=self.theme_cls.primary_color,
+                        on_release=lambda x: self.dialog.dismiss(),
+                    ),
+                ],
+            )
+        self.dialog.open()
+    def reset_button(self):
+        self.show_alert_dialog()
+        self.state = "Inactive"
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "Blue"
 
     def reset_pomodoro(self):
-        self.state = "Inactivo"
-        print("Restart")
+        self.root.ids.play_button.icon = 'play-circle-outline' 
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "Blue"
         self.cicle_pom = 1500
         self.root.ids.time.text = "25:00"
         self.brake_pom = 300
         self.Long_Break = 900
-
+        self.dialog.dismiss(),
+        
 if __name__ == "__main__":
     MainApp().run()

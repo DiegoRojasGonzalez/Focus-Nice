@@ -1,46 +1,50 @@
 #:kivy 1.1.1
 <UIStorage>
     MDScreen: 
-        MDLabel:
-            id: state_actually
-            text: ''
-            halign:'center'
         MDBoxLayout:
-            orientation: 'vertical'
-            padding: [dp(10),dp(10),dp(10),dp(10)]
-
+            orientation: 'vertical'            
+            
+            
             MDBoxLayout:
                 orientation: 'horizontal'
-                padding: [dp(12),dp(12),dp(12),dp(12)]
- 
+                padding:  0, 100, 0, 0#espaciado de margen
                 MDLabel:
                     id: time
-                    text: '25:00'
+                    text: '00:00'
                     font_size: (self.width)/3
                     halign:'center'
-                    size_hint: 0.7,1
-
-
+                    valign:'center'
+                    size_hint: (1, 1)
+                    bold: True
+                    color: 0, 0, 0, 1
             MDBoxLayout:
                 orientation: 'horizontal'
-                padding: [dp(72),dp(12),dp(12),dp(12)]
-                spacing: dp(12)
-                size_hint: 1,0.30
-
+                padding:  0, 0, 0, 0#espaciado de margen
+                spacing: 10 #espaciado
+                size_hint: (1, 1)
+                MDLabel:
+                    id: actually_state
+                    text: 'Pomodoro'
+                    font_size: (self.width)/20
+                    halign:'center'
+            MDBoxLayout:
+                orientation: 'horizontal'
+                padding:  0, 0, 0, 0#espaciado de margen
+                spacing: 10 #espaciado
+                size_hint: (1, 1)
                 
                 MDFloatingActionButton:
                     id: play_button
                     icon:'play-circle-outline'
                     elevation_normal: 12
-                    on_release: app.start_pomodoro()
-                MDFloatingActionButton:
-                    id: control
-                    icon:'pause-circle-outline'
-                    elevation_normal: 12
-                    on_release: app.pause_pomodoro()
-                
+                    icon_size: (self.width)/2
+                    on_release: app.play_pause_pomodoro()
+                    #size
+                    
                 MDFloatingActionButton:
                     id: reset
                     icon:'restart'
                     elevation_normal: 12
-                    on_release: app.reset_pomodoro()
+                    on_release: app.reset_button()
+
+            
