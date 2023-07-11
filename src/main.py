@@ -5,6 +5,9 @@ from kivy.core.window import Window
 from kivy.clock import Clock
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivy.core.audio import SoundLoader
+from kivymd.uix.snackbar import Snackbar 
+
 
 Window.size = (360, 640)
 
@@ -12,22 +15,36 @@ class UIStorage(ScreenManager):
     pass
 
 class MainApp(MDApp):
-    cicle_pom = 1500  # tiempo de trabajo en segundos
-    brake_pom = 300  # tiempo de descanso corto en segundos
-    Long_Break = 500  # tiempo de descanso largo en segundos
-    state = "Inactive"  # estado inicial: trabajo
+    cicle_pom = 1500  
+    brake_pom = 300   
+    Long_Break = 900  
+    state = "Inactive"   
     dialog = None
-    
+    snackbar = None
+    cicles = 0
+    alarm_clock = SoundLoader.load('sounds/MechanicalClockSound.wav')
+
     def build(self):
         self.theme_cls.theme_style_switch_animation = True
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Blue"
         Builder.load_file("style.kv")
-        Clock.schedule_interval(self.update_text_time, 1)  # Llamamos al método update_text_time cada segundo
+        Clock.schedule_interval(self.update_text_time, 1) 
         return UIStorage()
+    
+    def on_start(self):
+
+        self.fps_monitor_start()
+
+    def on_resume(self):
+        print("on resume")
+        Clock.schedule_interval(self.update_text_time, 1)
+
+    def on_pause(self):
+        print("on pause")
+        Clock.unschedule(self.update_text_time)
 
     def update_text_time(self, dt):
-        print(self.state)
         if self.state == "Inactive":
             time_actually = self.cicle_pom
             minutes, seconds = divmod(time_actually, 60)
@@ -41,8 +58,8 @@ class MainApp(MDApp):
             self.root.ids.time.text = str(time_actually)
 
         if self.state == "Focus":
+            self.root.ids.actually_state.text = "Work Time!"
             if self.cicle_pom > 0:
-                print("Focus")
                 self.cicle_pom -= 1
                 time = self.cicle_pom
                 minutes, seconds = divmod(time, 60)
@@ -55,12 +72,15 @@ class MainApp(MDApp):
                 time = f'{minutes}:{seconds}'
                 self.root.ids.time.text = str(time)
             else:
+                self.alarm_clock.play()
+                self.show_snackbar_alert()
                 self.state = "Break"
                 self.cicle_pom = self.brake_pom
 
         elif self.state == "Break":
+            self.root.ids.actually_state.text = "Break Time!"
+            self.root.ids.time.text = "05:00"
             if self.cicle_pom > 0:
-                print("Break")
                 self.cicle_pom -= 1
                 time = self.cicle_pom
                 minutes, seconds = divmod(time, 60)
@@ -73,11 +93,20 @@ class MainApp(MDApp):
                 time = f'{minutes}:{seconds}'
                 self.root.ids.time.text = str(time)
             else:
-                self.cicle_pom = self.Long_Break
-                self.state = "Long_Break"
+                self.cicles += 1
+                self.alarm_clock.play()
+                self.show_snackbar_alert()
+                if self.cicles == 4:  
+                    self.cicles = 0                  
+                    self.cicle_pom = self.Long_Break
+                    self.state = "Long_Break"
+                else:
+                    self.cicle_pom = self.brake_pom
+                    self.state = "Focus"
 
         elif self.state == "Long_Break":
-            print("Long Break")
+            self.root.ids.actually_state.text = "Long Break Time!"
+            self.root.ids.time.text = "15:00"
             if self.cicle_pom > 0:
                 self.cicle_pom -= 1
                 time = self.cicle_pom
@@ -91,6 +120,8 @@ class MainApp(MDApp):
                 time = f'{minutes}:{seconds}'
                 self.root.ids.time.text = str(time)
             else:
+                self.alarm_clock.play()
+                self.show_snackbar_alert()
                 self.cicle_pom = self.brake_pom
                 self.state = "Focus"
     
@@ -105,7 +136,18 @@ class MainApp(MDApp):
             self.theme_cls.theme_style = "Light"
             self.theme_cls.primary_palette = "Blue"
             self.root.ids.play_button.icon = 'play-circle-outline' 
-
+    
+    def show_snackbar_alert(self):
+        currently_state = self.state
+        if currently_state == "Focus":
+            message = "You focus nice it's time to move your body"
+        if currently_state == "Break":
+            message = "Go to work"
+        elif currently_state == "Long_Break":
+            message = "You have completed 4 pomodoros relax"
+        self.snackbar = Snackbar(text=f"{message}",)
+        self.snackbar.open()
+    
     def show_alert_dialog(self):
         if not self.dialog:
             self.dialog = MDDialog(
@@ -115,13 +157,14 @@ class MainApp(MDApp):
                         text="RESTART",
                         theme_text_color="Custom",
                         text_color=self.theme_cls.primary_color,
-                        on_release=lambda x: self.reset_pomodoro(),
+                        on_release=lambda x: self.reset_pomodoro(), 
+
                     ),
                     MDFlatButton(
                         text="DISCARD",
                         theme_text_color="Custom",
                         text_color=self.theme_cls.primary_color,
-                        on_release=lambda x: self.dialog.dismiss(),
+                        on_release=lambda x: self.demis_reset(),
                     ),
                 ],
             )
@@ -131,6 +174,8 @@ class MainApp(MDApp):
         self.state = "Inactive"
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "Blue"
+        self.root.ids.actually_state.text = "Focus nice"
+
 
     def reset_pomodoro(self):
         self.root.ids.play_button.icon = 'play-circle-outline' 
@@ -140,7 +185,17 @@ class MainApp(MDApp):
         self.root.ids.time.text = "25:00"
         self.brake_pom = 300
         self.Long_Break = 900
+        self.cicles = 0                  
         self.dialog.dismiss(),
-        
+        self.root.ids.actually_state.text = "Focus nice"
+    
+    def demis_reset(self):
+        self.dialog.dismiss()
+        self.root.ids.play_button.icon = 'play-circle-outline'
+
+
+    
+
 if __name__ == "__main__":
     MainApp().run()
+
