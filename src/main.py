@@ -17,7 +17,7 @@ class UIStorage(ScreenManager):
 class MainApp(MDApp):
     cicle_pom = 1500  
     brake_pom = 300   
-    Long_Break = 900  
+    Long_Break = 900  #
     state = "Inactive"   
     dialog = None
     snackbar = None
@@ -127,6 +127,7 @@ class MainApp(MDApp):
     
     def play_pause_pomodoro(self):
         if self.state == "Inactive":
+            self.root.ids.actually_state.text = "Work Time!"
             self.state = "Focus"
             self.root.ids.play_button.icon = 'pause-circle-outline' 
             self.theme_cls.theme_style = "Dark"
@@ -136,6 +137,8 @@ class MainApp(MDApp):
             self.theme_cls.theme_style = "Light"
             self.theme_cls.primary_palette = "Blue"
             self.root.ids.play_button.icon = 'play-circle-outline' 
+            self.root.ids.actually_state.text = "Focus nice"
+
     
     def show_snackbar_alert(self):
         currently_state = self.state

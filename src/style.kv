@@ -1,50 +1,52 @@
 #:kivy 1.1.1
 <UIStorage>
     MDScreen: 
-        MDBoxLayout:
-            orientation: 'vertical'            
-            
-            
-            MDBoxLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(16)
+            pos_hint: {'center_y': 0.9}
+
+            BoxLayout:
                 orientation: 'horizontal'
-                padding:  0, 100, 0, 0#espaciado de margen
+                size_hint_y: None
+                height: dp(80)
+                MDLabel:
+                    id: actually_state
+                    text: 'Focus Nice'
+                    font_size: dp(30)
+                    halign: 'center'
+                    valign: 'middle'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(160)
                 MDLabel:
                     id: time
                     text: '00:00'
-                    font_size: (self.width)/3
-                    halign:'center'
-                    valign:'center'
-                    size_hint: (1, 1)
-                    bold: True
-                    color: 0, 0, 0, 1
-            MDBoxLayout:
-                orientation: 'horizontal'
-                padding:  0, 0, 0, 0#espaciado de margen
-                spacing: 10 #espaciado
-                size_hint: (1, 1)
-                MDLabel:
-                    id: actually_state
-                    text: 'Focus nice'
-                    font_size: (self.width)/20
-                    halign:'center'
-            MDBoxLayout:
-                orientation: 'horizontal'
-                padding:  0, 0, 0, 0#espaciado de margen
-                spacing: 10 #espaciado
-                size_hint: (1, 1)
-                
-                MDFloatingActionButton:
-                    id: play_button
-                    icon:'play-circle-outline'
-                    elevation_normal: 12
-                    icon_size: (self.width)/2
+                    font_size: dp(80)
+                    halign: 'center'
+                    valign: 'middle'
+
+            FloatLayout:
+                size_hint_y: None
+                height: dp(80)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+
+                MDIconButton:
+                    id: music_button
+                    icon: 'music'
+                    pos_hint: {'center_x': 0.25, 'center_y': 0.2}
                     on_release: app.play_pause_pomodoro()
-                    #size
                     
-                MDFloatingActionButton:
+                MDIconButton:
+                    id: play_button
+                    icon: 'play-circle-outline'
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+                    on_release: app.play_pause_pomodoro()
+                    
+                MDIconButton:
                     id: reset
-                    icon:'restart'
-                    elevation_normal: 12
+                    icon: 'restart'
+                    pos_hint: {'center_x': 0.75, 'center_y': 0.2}
                     on_release: app.reset_button()
-                
-                
