@@ -23,6 +23,9 @@ class MainApp(MDApp):
     snackbar = None
     cicles = 0
     alarm_clock = SoundLoader.load('sounds/MechanicalClockSound.wav')
+    rain_sound = SoundLoader.load('sounds/Rain.mp3')
+    rain_sound.loop = True
+    rain_sound.volume = 0
 
     def build(self):
         self.theme_cls.theme_style_switch_animation = True
@@ -33,7 +36,7 @@ class MainApp(MDApp):
         return UIStorage()
     
     def on_start(self):
-
+        self.rain_sound.play()
         self.fps_monitor_start()
 
     def on_resume(self):
@@ -132,6 +135,7 @@ class MainApp(MDApp):
             self.theme_cls.theme_style = "Dark"
             self.theme_cls.primary_palette = "Gray"
         elif not self.state == "Inactive":
+            self.root.ids.actually_state.text = "Focus nice"
             self.state = "Inactive"
             self.theme_cls.theme_style = "Light"
             self.theme_cls.primary_palette = "Blue"
@@ -193,8 +197,13 @@ class MainApp(MDApp):
         self.dialog.dismiss()
         self.root.ids.play_button.icon = 'play-circle-outline'
 
-
-    
+    def play_pause_music(self):
+        if self.root.ids.music_button.icon == "music-off":
+            self.rain_sound.volume = 1
+            self.root.ids.music_button.icon = "music"
+        else:
+            self.rain_sound.volume = 0
+            self.root.ids.music_button.icon = "music-off"
 
 if __name__ == "__main__":
     MainApp().run()
