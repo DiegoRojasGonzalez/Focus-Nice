@@ -7,6 +7,8 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivy.core.audio import SoundLoader
 from kivymd.uix.snackbar import Snackbar 
+from kivymd.uix.bottomsheet import MDListBottomSheet
+import webbrowser
 
 
 Window.size = (360, 640)
@@ -26,16 +28,18 @@ class MainApp(MDApp):
     rain_sound = SoundLoader.load('sounds/Rain.mp3')
     rain_sound.loop = True
     rain_sound.volume = 0
-
+    
     def build(self):
-        self.theme_cls.theme_style_switch_animation = True
-        self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Blue"
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "Orange" 
+
         Builder.load_file("style.kv")
         Clock.schedule_interval(self.update_text_time, 1) 
         return UIStorage()
     
     def on_start(self):
+        self.root.ids.slider_volume.opacity = 0
+        self.root.ids.slider_volume.disabled = True
         self.rain_sound.play()
         self.fps_monitor_start()
 
@@ -133,13 +137,10 @@ class MainApp(MDApp):
             self.root.ids.actually_state.text = "Work Time!"
             self.state = "Focus"
             self.root.ids.play_button.icon = 'pause-circle-outline' 
-            self.theme_cls.theme_style = "Dark"
-            self.theme_cls.primary_palette = "Gray"
         elif not self.state == "Inactive":
+            self.rain_sound.volume = 0
             self.root.ids.actually_state.text = "Focus nice"
             self.state = "Inactive"
-            self.theme_cls.theme_style = "Light"
-            self.theme_cls.primary_palette = "Blue"
             self.root.ids.play_button.icon = 'play-circle-outline' 
             self.root.ids.actually_state.text = "Focus nice"
 
@@ -162,15 +163,11 @@ class MainApp(MDApp):
                 buttons=[
                     MDFlatButton(
                         text="RESTART",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.primary_color,
                         on_release=lambda x: self.reset_pomodoro(), 
 
                     ),
                     MDFlatButton(
                         text="DISCARD",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.primary_color,
                         on_release=lambda x: self.demis_reset(),
                     ),
                 ],
@@ -179,34 +176,49 @@ class MainApp(MDApp):
     def reset_button(self):
         self.show_alert_dialog()
         self.state = "Inactive"
-        self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Blue"
-        self.root.ids.actually_state.text = "Focus nice"
 
 
     def reset_pomodoro(self):
         self.root.ids.play_button.icon = 'play-circle-outline' 
-        self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Blue"
         self.cicle_pom = 1500
         self.root.ids.time.text = "25:00"
         self.brake_pom = 300
         self.Long_Break = 900
         self.cicles = 0                  
         self.dialog.dismiss(),
-        self.root.ids.actually_state.text = "Focus nice"
+        self.root.ids.actually_state.text = ""
     
     def demis_reset(self):
         self.dialog.dismiss()
         self.root.ids.play_button.icon = 'play-circle-outline'
 
-    def play_pause_music(self):
+
+    def play_pause_music(self):   
         if self.root.ids.music_button.icon == "music-off":
-            self.rain_sound.volume = 1
             self.root.ids.music_button.icon = "music"
+            self.rain_sound.volume = 0.5
+            self.root.ids.slider_volume.opacity = 1
+            self.root.ids.slider_volume.disabled = False
+
         else:
-            self.rain_sound.volume = 0
             self.root.ids.music_button.icon = "music-off"
+            self.rain_sound.volume = 0
+            self.root.ids.slider_volume.opacity = 0
+            self.root.ids.slider_volume.disabled = True
+
+    def show_bottom_sheet_info(self):
+        bottom_sheet_menu = MDListBottomSheet()
+        bottom_sheet_menu.add_item(
+            "Linkedin",
+            lambda x: webbrowser.open("https://www.linkedin.com/in/diegoignaciorojasgonzalez/"),
+            icon="linkedin",
+        )
+        bottom_sheet_menu.add_item(
+            "Github",
+            lambda x: webbrowser.open("https://github.com/DiegoRojasGonzalez"),
+            icon="github",
+        )
+        bottom_sheet_menu.open()
 
 if __name__ == "__main__":
     MainApp().run()

@@ -4,15 +4,25 @@
         BoxLayout:
             orientation: 'vertical'
             padding: dp(16)
-            pos_hint: {'center_y': 0.9}
+            pos_hint: {'center_y': 0.7}
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint_y: None
-                height: dp(80)
+                height: dp(160)
+                MDIconButton:
+                    id: config_button
+                    icon: 'information-variant'
+                    on_release: app.show_bottom_sheet_info()
+                    pos_hint: {'center_x': 0.25, 'center_y': 0.2}
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(80)    
                 MDLabel:
                     id: actually_state
-                    text: 'Focus Nice'
+                    text: ''
                     font_size: dp(30)
                     halign: 'center'
                     valign: 'middle'
@@ -34,30 +44,30 @@
                 pos_hint: {'center_x': 0.5, 'center_y': 0.2}
 
                 MDIconButton:
-                    id: music_button
-                    icon: 'music'
-                    pos_hint: {'center_x': 0.25, 'center_y': 0.2}
-                    on_release: app.play_pause_pomodoro()
-                    
-                MDIconButton:
                     id: play_button
                     icon: 'play-circle-outline'
                     pos_hint: {'center_x': 0.5, 'center_y': 0.2}
                     on_release: app.play_pause_pomodoro()
-                    
+                
                 MDIconButton:
                     id: reset
                     icon: 'restart'
                     pos_hint: {'center_x': 0.75, 'center_y': 0.2}
                     on_release: app.reset_button()
-<<<<<<< HEAD
-=======
-
-                MDFloatingActionButton:
+                
+                MDIconButton:
                     id: music_button
-                    icon:'music-off'
-                    elevation_normal: 12
+                    icon: 'music-off'
+                    pos_hint: {'center_x': 0.25, 'center_y': 0.2}
                     on_release: app.play_pause_music()
-                
-                
->>>>>>> 1b10618c5294200a64634dd6509e6856c301c7d5
+
+                MDSlider:
+                    id: slider_volume
+                    orientation: 'vertical'
+                    min: 0
+                    max: 1
+                    value: app.rain_sound.volume
+                    on_value: app.rain_sound.volume = self.value
+                    pos_hint: {'center_x': 0.25, 'center_y': 0.9}
+                    hint: False
+
