@@ -8,8 +8,9 @@ Focus Nice is a Pomodoro app developed in Python using Kvlang (Kivy/KivyMD) fram
 <div style="display: flex;">
   <img src="https://raw.githubusercontent.com/DiegoRojasGonzalez/DiegoRojasGonzalez.github.io/main/resources/img/Screenshot%20FocusNice-1.png" alt="ScreenshotFocusNice1" width="200" />
   <img src="https://raw.githubusercontent.com/DiegoRojasGonzalez/DiegoRojasGonzalez.github.io/main/resources/img/Screenshot%20FocusNice-2.png" alt="ScreenshotFocusNice2" width="200" />
+  <img src="https://raw.githubusercontent.com/DiegoRojasGonzalez/DiegoRojasGonzalez.github.io/main/resources/img/Screenshot%20FocusNice-3.png" alt="ScreenshotFocusNice3" width="200" />
+  
 </div>
-
 ## Requirements
 - Python 3.11.4 
 - pip 23.1.2
