@@ -16,10 +16,10 @@ Window.size = (360, 640)
 class UIStorage(ScreenManager):
     pass
 
-class MainApp(MDApp):
+class FocusNiceApp(MDApp):
     cicle_pom = 1500  
     brake_pom = 300   
-    Long_Break = 900  #
+    Long_Break = 900  
     state = "Inactive"   
     dialog = None
     snackbar = None
@@ -28,11 +28,9 @@ class MainApp(MDApp):
     rain_sound = SoundLoader.load('sounds/Rain.mp3')
     rain_sound.loop = True
     rain_sound.volume = 0
-    
     def build(self):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Orange" 
-
         Builder.load_file("style.kv")
         Clock.schedule_interval(self.update_text_time, 1) 
         return UIStorage()
@@ -41,7 +39,6 @@ class MainApp(MDApp):
         self.root.ids.slider_volume.opacity = 0
         self.root.ids.slider_volume.disabled = True
         self.rain_sound.play()
-        self.fps_monitor_start()
 
     def on_resume(self):
         print("on resume")
@@ -221,5 +218,4 @@ class MainApp(MDApp):
         bottom_sheet_menu.open()
 
 if __name__ == "__main__":
-    MainApp().run()
-
+    FocusNiceApp().run()

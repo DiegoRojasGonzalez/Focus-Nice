@@ -1,11 +1,20 @@
 #:kivy 1.1.1
+#:import Image kivy.uix.image.Image
+
 <UIStorage>
     MDScreen: 
+        Image:
+            source: 'images/background.jpg'
+            allow_stretch: True
+            keep_ratio: False
+            opacity: 0.3
+            fit_mode: 'fill'
+
         BoxLayout:
             orientation: 'vertical'
             padding: dp(16)
             pos_hint: {'center_y': 0.7}
-
+            
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint_y: None
@@ -23,10 +32,11 @@
                 MDLabel:
                     id: actually_state
                     text: ''
-                    font_size: dp(30)
+                    font_size: dp(20)
                     halign: 'center'
                     valign: 'middle'
-            
+                    font_style: 'H5'
+
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint_y: None
