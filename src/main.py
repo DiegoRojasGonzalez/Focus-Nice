@@ -17,9 +17,9 @@ class UIStorage(ScreenManager):
     pass
 
 class FocusNiceApp(MDApp):
-    cicle_pom = 1500  
+    cicle_pom = 1500
     brake_pom = 300   
-    Long_Break = 900  
+    Long_Break = 900 
     state = "Inactive"   
     dialog = None
     snackbar = None
@@ -62,7 +62,9 @@ class FocusNiceApp(MDApp):
             self.root.ids.time.text = str(time_actually)
 
         if self.state == "Focus":
-            self.root.ids.actually_state.text = "Work Time!"
+            self.root.ids.focus_button.text_color = "orange"
+            self.root.ids.brake_button.text_color = "gray"
+            self.root.ids.long_brake_button.text_color = "gray"
             if self.cicle_pom > 0:
                 self.cicle_pom -= 1
                 time = self.cicle_pom
@@ -82,7 +84,9 @@ class FocusNiceApp(MDApp):
                 self.cicle_pom = self.brake_pom
 
         elif self.state == "Break":
-            self.root.ids.actually_state.text = "Break Time!"
+            self.root.ids.focus_button.text_color = "gray"
+            self.root.ids.brake_button.text_color = "orange"
+            self.root.ids.long_brake_button.text_color = "gray"
             self.root.ids.time.text = "05:00"
             if self.cicle_pom > 0:
                 self.cicle_pom -= 1
@@ -109,7 +113,9 @@ class FocusNiceApp(MDApp):
                     self.state = "Focus"
 
         elif self.state == "Long_Break":
-            self.root.ids.actually_state.text = "Long Break Time!"
+            self.root.ids.focus_button.text_color = "gray"
+            self.root.ids.brake_button.text_color = "gray"
+            self.root.ids.long_brake_button.text_color = "orange"
             self.root.ids.time.text = "15:00"
             if self.cicle_pom > 0:
                 self.cicle_pom -= 1
@@ -131,15 +137,15 @@ class FocusNiceApp(MDApp):
     
     def play_pause_pomodoro(self):
         if self.state == "Inactive":
-            self.root.ids.actually_state.text = "Work Time!"
             self.state = "Focus"
             self.root.ids.play_button.icon = 'pause-circle-outline' 
         elif not self.state == "Inactive":
             self.rain_sound.volume = 0
-            self.root.ids.actually_state.text = "Focus nice"
+            self.root.ids.focus_button.text_color = "gray"
+            self.root.ids.brake_button.text_color = "gray"
+            self.root.ids.long_brake_button.text_color = "gray"
             self.state = "Inactive"
             self.root.ids.play_button.icon = 'play-circle-outline' 
-            self.root.ids.actually_state.text = "Focus nice"
 
     
     def show_snackbar_alert(self):
@@ -183,7 +189,9 @@ class FocusNiceApp(MDApp):
         self.Long_Break = 900
         self.cicles = 0                  
         self.dialog.dismiss(),
-        self.root.ids.actually_state.text = ""
+        self.root.ids.focus_button.text_color = "gray"
+        self.root.ids.brake_button.text_color = "gray"
+        self.root.ids.long_brake_button.text_color = "gray"
     
     def demis_reset(self):
         self.dialog.dismiss()
@@ -216,6 +224,27 @@ class FocusNiceApp(MDApp):
             icon="github",
         )
         bottom_sheet_menu.open()
+
+    def change_state_focus(self):
+        self.cicle_pom = 1500
+        self.state = "Focus"
+        self.root.ids.play_button.icon = 'pause-circle-outline' 
+        self.cicle_pom = self.cicle_pom
+        pass
+    
+    def change_state_brake(self):
+        self.cicle_pom = 300
+        self.state = "Break"
+        self.root.ids.play_button.icon = 'pause-circle-outline' 
+        self.cicle_pom = self.brake_pom
+        pass
+    
+    def change_state_lgbrake(self):
+        self.cicle_pom = 900
+        self.state = "Long_Break"
+        self.root.ids.play_button.icon = 'pause-circle-outline' 
+        self.cicle_pom = self.cicle_pom
+        pass
 
 if __name__ == "__main__":
     FocusNiceApp().run()

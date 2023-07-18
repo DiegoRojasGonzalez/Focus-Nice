@@ -9,7 +9,6 @@
             keep_ratio: False
             opacity: 0.3
             fit_mode: 'fill'
-
         BoxLayout:
             orientation: 'vertical'
             padding: dp(16)
@@ -47,6 +46,7 @@
                     font_size: dp(80)
                     halign: 'center'
                     valign: 'middle'
+                    bold: True
 
             FloatLayout:
                 size_hint_y: None
@@ -81,3 +81,28 @@
                     pos_hint: {'center_x': 0.25, 'center_y': 0.9}
                     hint: False
 
+
+
+                MDFlatButton:
+                    id: focus_button
+                    text: "FOCUS"
+                    theme_text_color: "Custom"
+                    text_color: "gray"
+                    pos_hint: {'center_x': 0.25, 'center_y': 3.5}
+                    on_release: app.change_state_focus()
+
+                MDFlatButton:
+                    id: brake_button
+                    text: "BRAKE"
+                    theme_text_color: "Custom"
+                    text_color: "gray"
+                    pos_hint: {'center_x': 0.5, 'center_y': 3.5}
+                    on_release: app.change_state_brake()
+
+                MDFlatButton:
+                    id: long_brake_button
+                    text: "LONG BRAKE"
+                    theme_text_color: "Custom"
+                    text_color: "gray"
+                    pos_hint: {'center_x': 0.76, 'center_y': 3.5}
+                    on_release: app.change_state_lgbrake()
