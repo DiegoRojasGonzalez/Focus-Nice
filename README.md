@@ -1,4 +1,11 @@
 # Focus Nice
+
+<div style="display: flex;">
+  <img src="https://i0.wp.com/tinkercademy.com/wp-content/uploads/2018/04/python-icon.png?ssl=1" width="50" />
+  <img src="https://quintagroup.com/cms/python/images/kivy-logo.png/@@images/52056b87-5872-4e24-8483-2c20e62fa79d.png" width="50" />
+  <img src="https://raw.githubusercontent.com/kivymd/internal/main/logo/kivymd.png" width="50" />
+</div>
+
 ## Description
 Focus Nice is a Pomodoro app developed in Python using Kvlang (Kivy/KivyMD) framework. The app is designed to enhance productivity and maintain a focused approach to tasks by implementing the Pomodoro technique. It allows users to divide their time into intervals of work and rest, helping them maintain a proper balance and avoid mental fatigue.
 
@@ -9,12 +16,6 @@ Focus Nice is a Pomodoro app developed in Python using Kvlang (Kivy/KivyMD) fram
   <img src="https://raw.githubusercontent.com/DiegoRojasGonzalez/DiegoRojasGonzalez.github.io/main/resources/img/ScreenshotFocusnice2.png" alt="ScreenshotFocusNice2" width="200" />
   <img src="https://raw.githubusercontent.com/DiegoRojasGonzalez/DiegoRojasGonzalez.github.io/main/resources/img/ScreenshotFocusnice3.png" alt="ScreenshotFocusNice3" width="200" /> 
   <img src="https://raw.githubusercontent.com/DiegoRojasGonzalez/DiegoRojasGonzalez.github.io/main/resources/img/ScreenshotFocusnice4.png" alt="ScreenshotFocusNice4" width="200" /> 
-</div>
-
-<div style="display: flex;">
-  <img src="https://i0.wp.com/tinkercademy.com/wp-content/uploads/2018/04/python-icon.png?ssl=1" width="50" />
-  <img src="https://quintagroup.com/cms/python/images/kivy-logo.png/@@images/52056b87-5872-4e24-8483-2c20e62fa79d.png" width="50" />
-  <img src="https://raw.githubusercontent.com/kivymd/internal/main/logo/kivymd.png" width="50" />
 </div>
 
 ## Requirements
